@@ -1,49 +1,106 @@
-let apiKey = 'SUA_CHAVE_DE_API';  // Substitua pela sua chave de API do YouTube
-let channelId = 'UCmAvcHTn0bS6d6O8vQx5ynQ'; // ID do canal de Felipe Neto
-let videos = [];
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Filmes Recomendados</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        header {
+            background-color: #222;
+            color: white;
+            text-align: center;
+            padding: 1rem;
+        }
+        h1 {
+            margin: 0;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        .movie-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+        .movie-card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            overflow: hidden;
+            transition: transform 0.3s;
+        }
+        .movie-card:hover {
+            transform: translateY(-5px);
+        }
+        .movie-card img {
+            width: 100%;
+            height: 350px;
+            object-fit: cover;
+        }
+        .movie-card h3 {
+            margin: 1rem;
+            font-size: 1.2rem;
+        }
+        .movie-card p {
+            margin: 0 1rem 1rem;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Filmes Recomendados</h1>
+    </header>
+    <div class="container">
+        <div class="movie-grid" id="movie-grid">
+            <!-- Filmes serão adicionados via JavaScript -->
+        </div>
+    </div>
+    <script>
+        const movies = [
+            {
+                title: "O Poderoso Chefão",
+                description: "Um clássico sobre a máfia italiana nos EUA, dirigido por Francis Ford Coppola.",
+                image: "https://mid-noticias.curitiba.pr.gov.br/2022/00337449.jpg"
+            },
+            {
+                title: "Interestelar",
+                description: "Uma épica viagem espacial em busca de um novo lar para a humanidade.",
+                image: "https://a-static.mlcdn.com.br/1500x1500/dvd-interestelar-christopher-nolan-warner-bros/togethercds/7892110201872/fcc652f3709c957d3e972464e55e05bd.jpeg"
+            },
+            {
+                title: "Clube da Luta",
+                description: "Um homem desiludido forma um clube secreto com consequências inesperadas.",
+                image: "https://br.web.img2.acsta.net/r_1280_720/medias/nmedia/18/90/95/96/20122166.jpg"
+            },
+            {
+                title: "A Origem",
+                description: "Um ladrão especializado em infiltrar sonhos enfrenta seu maior desafio.",
+                image: "https://m.media-amazon.com/images/I/61AFbsFwh7L.jpg"
+            }
+        ];
 
-function setup() {
-  noLoop();  // Apenas desenha uma vez
-  fetchVideos();  // Pega os vídeos do canal do Felipe Neto
-}
+        const movieGrid = document.getElementById('movie-grid');
 
-function draw() {
-  // Esse código não desenha na tela com p5.js, mas usamos a função draw para inicializar a interface.
-}
-
-function fetchVideos() {
-  const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&channelId=${channelId}&maxResults=10&key=${apiKey}`;
-  loadJSON(url, (data) => {
-    videos = data.items.map(item => {
-      return {
-        title: item.snippet.title,
-        videoId: item.id.videoId,
-        thumbnail: item.snippet.thumbnails.high.url
-      };
-    });
-    displayVideos();  // Exibe os vídeos assim que os dados forem carregados
-  });
-}
-
-function displayVideos() {
-  let container = select('#videos-container');
-  videos.forEach((video) => {
-    let videoElement = createDiv();
-    videoElement.addClass('video-item');
-    
-    let img = createImg(video.thumbnail);
-    img.size(200, 120);
-    img.addClass('thumbnail');
-    img.parent(videoElement);
-    
-    let title = createElement('h3', video.title);
-    title.addClass('video-title');
-    title.parent(videoElement);
-    
-    let link = createA(`https://www.youtube.com/watch?v=${video.videoId}`, 'Assistir', '_blank');
-    link.addClass('video-link');
-    link.parent(videoElement);
-    
-    container.child(videoElement);
-  });
-}
+        movies.forEach(movie => {
+            const movieCard = document.createElement('div');
+            movieCard.classList.add('movie-card');
+            movieCard.innerHTML = `
+                <img src="${movie.image}" alt="${movie.title}">
+                <h3>${movie.title}</h3>
+                <p>${movie.description}</p>
+            `;
+            movieGrid.appendChild(movieCard);
+        });
+    </script>
+</body>
+</html>
